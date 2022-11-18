@@ -1,0 +1,15 @@
+success :
+---- 200 : ok
+
+error : 
+---- 401 : (Unauthorized)
+---- 403 : (Forbidden)
+
+sessionStorage : // to store information for all page
+---- .setItem("var", "value")
+---- .getItem("var")
+
+sessionStorage.setItem("token", "fwfewfewfe");
+sessionStorage.removeItem("token");
+
+
