@@ -2,21 +2,22 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Header from "../../Header";
+import ModalAjoutUtilisateur from "./ModalAjout";
 
 const IP = `192.168.8.102`;
 const PORT = `:5010`;
 const URL = `http://` + IP + PORT + `/api/utilisateur/`;
 
 export default function Utilisateur() {
+  const closeAddModal = () => setShow(false);
   const handleClose = () => setShow(false);
+  const showAddModal = () => setShow(true);
   const handleShow = () => setShow(true);
   const [show, setShow] = useState(false);
 
@@ -138,6 +139,15 @@ export default function Utilisateur() {
     <>
       <div>
         <Header />
+
+        <Button onClick={showAddModal}> CLIC </Button>
+        {show ? (
+          <ModalAjoutUtilisateur
+            show={show}
+            onHide={closeAddModal}
+          />
+        ) : null}
+
         <h2>
           List Utilisateurs
           <span> </span>
@@ -217,7 +227,7 @@ export default function Utilisateur() {
       </div>
 
       {/*  ----- MODAL AJOUT ----- */}
-      <Modal
+      {/* <Modal
         show={show}
         onHide={handleClose}
         backdrop="static"
@@ -290,7 +300,7 @@ export default function Utilisateur() {
             Save Changes
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
 
       {/*  ----- MODAL MODIFICATION / EDITER ----- */}
       <Modal

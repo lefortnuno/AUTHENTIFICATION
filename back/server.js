@@ -26,6 +26,6 @@ app.use( (req, res, next) => {
 
 app.use("/api/utilisateur", utilisateurRoute)
 
-app.listen(process.env.PORT, () => {
+app.listen((process.env.PORT || process.env.URL_HOST_IP), () => {
     console.log(`Ecoute au port ${process.env.PORT} ....`);
 })
