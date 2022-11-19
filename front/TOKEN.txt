@@ -12,4 +12,6 @@ sessionStorage : // to store information for all page
 sessionStorage.setItem("token", "fwfewfewfe");
 sessionStorage.removeItem("token");
 
+localStorage.setItem("token", "fwfewfewfe");
+localStorage.removeItem("token");
 

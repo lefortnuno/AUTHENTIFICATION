@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const tmp = 3 * 24 * 60 * 60 * 1000;
 
 const createToken = (numCompte) => {
-  return jwt.sign({ numCompte }, `12nuno98Trofel56`, { expiresIn: tmp });
+  return jwt.sign({ numCompte }, process.env.TOKEN_SECRET, { expiresIn: tmp });
 };
 
 module.exports.addUtilisateur = (req, res) => {

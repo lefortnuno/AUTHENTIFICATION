@@ -5,7 +5,7 @@ module.exports.checkUtilisateur = (req, res, next) => {
   const token = req.headers.authorization;
 
   if (token) {
-    jwt.verify(token, `12nuno98Trofel56`, async (err, decodedToken) => {
+    jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
       if (decodedToken) {
         const dtok = decodedToken.numCompte[0];
         utilisateurModel.getIdUtilisateur(dtok.numCompte, (err, resultat) => {
