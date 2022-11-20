@@ -7,15 +7,13 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-// import PropTypes from "prop-types";
 
 const IP = `192.168.8.102`;
 const PORT = `:5010`;
 const URL = `http://` + IP + PORT + `/api/utilisateur/`;
 
-export default function ModalAjoutUtilisateur(props) {
+export default function ModalAjout(props) {
   const [inputs, setInputs] = useState([]);
-  const [users, setUsers] = useState([]);
 
   const handleChangePDP = (event) => {
     const name = event.target.name;
@@ -28,6 +26,8 @@ export default function ModalAjoutUtilisateur(props) {
     axios.post(URL, data).then(function (response) {
       if (response.data.success) {
         toast.success(response.data.message);
+        reset();
+        props.onHide();
       } else {
         toast.error(response.data.message);
       }
@@ -39,14 +39,14 @@ export default function ModalAjoutUtilisateur(props) {
   }
   const validationSchema = Yup.object().shape({
     identification: Yup.string()
-      .min(2, "trop court")
-      .required("identification obligatoire"),
-    mdp: Yup.string().min(4, "trop court").required("Mot de passe obligatoire"),
+      .required("identification obligatoire")
+      .min(2, "trop court!entrez au moins 2 caracteres"),
+    mdp: Yup.string().required("Mot de passe obligatoire").min(4, "trop court! entrez au moins 4 caracteres"),
     confirmMdp: Yup.string()
       .required("Mot de passe de confirmation obligatoire")
       .oneOf(
         [Yup.ref("mdp"), null],
-        "Le mot de passe de confirmation ne correspond pas!"
+        "Le mot de passe de confirmation ne correspond pas au 1er mot de pass!"
       ),
   });
 
@@ -66,7 +66,6 @@ export default function ModalAjoutUtilisateur(props) {
     props.onHide();
   }
 
-  console.log("etat modal props.... : ", props.show);
   return (
     <>
       <Modal
@@ -76,22 +75,74 @@ export default function ModalAjoutUtilisateur(props) {
         backdrop="static"
         keyboard={false}
       >
-        <Modal.Header>
-          <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Header >
+          <Modal.Title>{props.children}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput0">
+              <Form.Label>Photo de profile</Form.Label>
+              <Form.Control
+                type="file"
+                name="photoPDP"
+                onChange={handleChangePDP}
+                placeholder="photoPDP"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Identification</Form.Label>
+              <Form.Control
+                type="text"
+                name="identification"
+                {...register("identification")}
+                placeholder="identification"
+                autoFocus
+              />
+              <small className="text-danger d-block">
+                {errors.identification?.message}
+              </small>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+              <Form.Label>Mot de pass</Form.Label>
+              <Form.Control
+                type="password"
+                name="mdp"
+                {...register("mdp")}
+                placeholder="mot de pass"
+              />
+              <small className="text-danger d-block">
+                {errors.mdp?.message}
+              </small>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
+              <Form.Label>confirmez votre mot de pass</Form.Label>
+              <Form.Control
+                type="password"
+                name="confirmMdp"
+                {...register("confirmMdp")}
+                placeholder="confirmez votre mot de pass"
+              />
+              <small className="text-danger d-block">
+                {errors.confirmMdp?.message}
+              </small>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+
         <Modal.Footer>
           <Button variant="danger" onClick={onClose}>
             Close
           </Button>
-          <Button variant="primary">Submit</Button>
+
+          <Button variant="primary" onClick={handleSubmit(onSubmit)}>
+            Save Changes
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
   );
 }
-
-// Modal.propTypes = {
-//     onClose: PropTypes.func.isRequired,
-//     show: PropTypes.bool.isRequired
-//   };

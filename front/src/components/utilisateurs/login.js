@@ -10,7 +10,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
-const URL = `http://192.168.8.102:5010/api/utilisateur/seConnecter`
+const IP = `192.168.8.102`;
+const PORT = `:5010`;
+const URL = `http://` + IP + PORT + `/api/utilisateur/seConnecter`;
 
 export default function Login() {
   const navigate = useNavigate();

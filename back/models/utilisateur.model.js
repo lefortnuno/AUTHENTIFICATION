@@ -74,7 +74,7 @@ Utilisateur.getIdUtilisateur = (numCompte, result) => {
         if (res.length !== 0) {
           result(null, res);
         } else {
-          result(null, null);
+          result(null, res);
         }
       }
     }
