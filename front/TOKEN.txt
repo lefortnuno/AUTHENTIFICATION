@@ -2,6 +2,7 @@ success :
 ---- 200 : ok
 
 error : 
+---- 400 : login/password incorrect
 ---- 401 : (Unauthorized)
 ---- 403 : (Forbidden)
 

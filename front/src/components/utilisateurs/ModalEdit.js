@@ -58,7 +58,7 @@ export default function ModalEdition(props) {
         backdrop="static"
         keyboard={false}
       >
-        <Modal.Header>
+        <Modal.Header >
           <Modal.Title>Edition Utilisateur Numero : {id}</Modal.Title>
         </Modal.Header>
 

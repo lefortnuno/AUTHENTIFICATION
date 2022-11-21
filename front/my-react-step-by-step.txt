@@ -1,0 +1,68 @@
+
+/************** CREAION ALL
+
+npx create-react-app .
+
+npm i axios
+npm i react-toastify
+npm i react-router-dom
+npm i react-bootstrap
+npm i bootstrap
+
+npm start
+
+/**************************/
+npm install @hookform/resolvers yup
+npm i react-icons
+
+// ------------------------------ LISTE ICONS "BS"
+BsFillCheckCircleFill
+BsFillExclamationOctagonFill
+BsFillFileCheckFill
+BsFillFileEarmarkCheckFill
+BsFillFileImageFill
+BsFillFileLock2Fill
+BsFillFilePersonFill
+BsFillGearFill
+BsFillGeoAltFill
+BsFillHouseFill
+BsFillKeyFill
+BsFillPersonDashFill
+BsFillPersonPlusFill
+BsFillStarFill
+BsFillTelephoneFill
+BsCheckLg
+BsEnvelope
+BsPencilSquare
+BsPersonBoundingBox
+BsPlusCircleDotted
+BsToggleOff
+BsToggleOn
+BsUpload
+BsXLg
+BsSearch
+TbSend
+BsEyeSlash
+BsEye
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

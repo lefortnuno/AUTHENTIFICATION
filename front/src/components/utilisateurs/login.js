@@ -1,48 +1,46 @@
-import axios from "axios";
+import axios from "../../api/axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Header from "../../Header"
+import Header from "../../Header";
 import { useForm } from "react-hook-form";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
-const IP = `192.168.8.102`;
-const PORT = `:5010`;
-const URL = `http://` + IP + PORT + `/api/utilisateur/seConnecter`;
+const LOGIN_URL = `/seConnecter`;
 
 export default function Login() {
   const navigate = useNavigate();
+  const [errMsg, setErrMsg] = useState("");
 
   //ENVOYER DONNER FORMULAIRE AU BACK-END
   const onSubmit = (data) => {
     axios
-      .post(URL, data)
+      .post(LOGIN_URL, data)
       .then(function (response) {
-        if (response.data.success && response.status === 200) {
+        if (response.data.success) {
           navigate("/utilisateur/"); // a decommenter si hiditr page hafa !
-          toast.success(`Co Reussi`);
-          localStorage.setItem("userInfo", response.data.user);
+          toast.success(`Connection Reussi`);
+          localStorage.setItem("u_numCompte", response.data.user[0].numCompte);
+          localStorage.setItem("u_attribut", response.data.user[0].attribut);
+          localStorage.setItem("u_etatCompte", response.data.user[0].etatCompte);
+          localStorage.setItem("u_photoPDP", response.data.user[0].photoPDP);
           localStorage.setItem("token", response.data.token);
         } else {
-          toast.error(`Co echec`);
+          setErrMsg("Identification ou Mot de pass Incorrect ! ");
         }
       })
       .catch((error) => {
-        console.log("Il y a une erreur : ", error);
+        setErrMsg("Erreur de connection : ", error, " Veuillez vous connecter au serveur !");
       });
   };
 
-  {
-    /* SCHEMA VALIDATION FORMULAIRE ----- MA FORM LOGIN / SE CONNECTER ----- */
-  }
+ //SCHEMA VALIDATION FORMULAIRE LOGIN / SE CONNECTER ----- 
   const validationSchema = Yup.object().shape({
     identification: Yup.string().required("Identification obligatoire"),
-    mdp: Yup.string()
-      .required("Mot de passe obligatoire"),
+    mdp: Yup.string().required("Mot de passe obligatoire"),
   });
 
   const { register, handleSubmit, formState, reset } = useForm({
@@ -54,47 +52,58 @@ export default function Login() {
     resolver: yupResolver(validationSchema),
   });
 
+  function onClose() {
+    reset();
+  }
+
   const { errors } = formState;
   return (
     <>
       <div className="container">
         <Header />
-          <Form className="text-center border border-light p-5">
-            <p className="h4 mb-4">Se Connecter</p>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label> </Form.Label>
-              <Form.Control
-                type="text"
-                name="identification"
-                {...register("identification")}
-                placeholder="identification"
-                className="form-control mb-4"
-                autoFocus
-              />
-              <small className="text-danger d-block">
-                {errors.identification?.message}
-              </small>
-            </Form.Group>
+        <Form className="text-center border border-light p-5">
+          <p className="h4 mb-4">Se Connecter</p>
+          <div className={!errMsg ? null : "alert alert-danger"}  >
+            {errMsg}
+          </div>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label> </Form.Label>
+            <Form.Control
+              type="text"
+              name="identification"
+              {...register("identification")}
+              placeholder="identification"
+              className="form-control mb-4"
+              autoFocus
+              autoComplete="off"
+              required
+            />
+            <small className="text-danger d-block">
+              {errors.identification?.message}
+            </small>
+          </Form.Group>
 
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-              <Form.Label> </Form.Label>
-              <Form.Control
-                type="password"
-                name="mdp"
-                {...register("mdp")}
-                placeholder="mot de pass"
-                className="form-control mb-4"
-              />
-              <small className="text-danger d-block">{errors.mdp?.message}</small>
-            </Form.Group>
-            <Button variant="danger" type="reset">
-              Annuler
-            </Button>
-            <span> </span>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+            <Form.Label> </Form.Label>
+            <Form.Control
+              type="password"
+              name="mdp"
+              {...register("mdp")}
+              placeholder="mot de pass"
+              className="form-control mb-4"
+              autoComplete="off"
+              required
+            />
+            <small className="text-danger d-block">{errors.mdp?.message}</small>
+          </Form.Group>
+          <Button variant="danger" onClick={onClose}>
+            Annuler
+          </Button>
+          <span> </span>
           <Button variant="primary" onClick={handleSubmit(onSubmit)}>
-              Se Connecter
-            </Button>
-          </Form>
+            Se Connecter
+          </Button>
+        </Form>
       </div>
     </>
   );

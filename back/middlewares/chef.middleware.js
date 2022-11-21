@@ -11,9 +11,7 @@ module.exports.checkUtilisateur = (req, res, next) => {
         utilisateurModel.getIdUtilisateur(dtok.numCompte, (err, resultat) => {
           if (
             resultat[0].attribut == "admin" ||
-            resultat[0].attribut == "chef" ||
-            resultat[0].attribut == "chef adjoint" ||
-            resultat[0].attribut == "agent"
+            resultat[0].attribut == "chef" 
           ) {
             next();
           } else {

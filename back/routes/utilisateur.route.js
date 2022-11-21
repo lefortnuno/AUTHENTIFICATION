@@ -1,10 +1,13 @@
 const router = require("express").Router();
 const utilisateurController = require("../controllers/utilisateur.controller");
-const middlewareAuth = require('../middlewares/auth.middleware')
+const admin = require('../middlewares/admin.middleware')
+const chef = require('../middlewares/chef.middleware')
+const chefAdjoint = require('../middlewares/chef.adjoint.middleware')
+const agent = require('../middlewares/agent.middleware')
 
 router.post("/seConnecter", utilisateurController.loginUtilisateur);
-// router.get("/", middlewareAuth.checkUtilisateur, utilisateurController.getAllUtilisateurs);
-router.get("/", utilisateurController.getAllUtilisateurs);
+router.get("/", admin.checkUtilisateur, utilisateurController.getAllUtilisateurs);
+// router.get("/", utilisateurController.getAllUtilisateurs);
 router.get("/:id", utilisateurController.getIdUtilisateur);
 router.post("/", utilisateurController.addUtilisateur);
 router.put("/:id", utilisateurController.updateUtilisateur);

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Nav from "react-bootstrap/Nav"
 import  NavDropdown from "react-bootstrap/Nav"
 
-function Header() {
+function Header(props) {
   const navigate = useNavigate();
   const userToken = localStorage.getItem("token");
   const seDeconnecter = () => {
@@ -17,6 +17,11 @@ function Header() {
       <ul className="navbar-nav">
         {userToken ? (
           <>
+          <li className="nav-item">
+            <Link to="/utilisateur/" className="nav-link">
+              {props.children}
+            </Link>
+          </li>
           <li className="nav-item">
             <Link to="/utilisateur/" className="nav-link">
               Gestion des Utilisateurs

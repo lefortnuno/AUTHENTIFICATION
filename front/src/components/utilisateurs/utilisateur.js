@@ -1,18 +1,30 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import axios from "../../api/axios";
+
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
+import { BsFillTrashFill, BsPencilSquare, BsEye } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
 import Header from "../../Header";
 import ModalAjout from "./ModalAjout";
 import ModalEdition from "./ModalEdit";
+import DeleteConfirmation from "./ModalSuppr";
 
-const IP = `192.168.8.102`;
-const PORT = `:5010`;
-const URL = `http://` + IP + PORT + `/api/utilisateur/`;
+const URL = `/`;
 
 export default function Utilisateur() {
+  
+  const navigate = useNavigate();
+  const u_token = localStorage.token;
+  const u_numCompte = localStorage.u_numCompte;
+  const u_attribut = localStorage.u_attribut;
+  const u_photoPDP = localStorage.u_photoPDP;
+  const u_etatCompte = localStorage.u_etatCompte;
+  
+    const u_info = { u_token, u_attribut, u_photoPDP, u_numCompte, u_etatCompte}
+  
+  // MODAL AJOUT UTILISATEUR
   const [show, setShow] = useState(false);
   const showAddModal = () => setShow(true);
   const closeAddModal = () => {
@@ -20,41 +32,71 @@ export default function Utilisateur() {
     setShow(false);
   };
 
+  // MODAL EDIT UTILISATEUR
   const [numCompteEdit, setNumCompteEdit] = useState("");
   const [showEdit, setShowEdit] = useState(false);
   const showEditModal = (numCompte) => {
     setNumCompteEdit(numCompte);
     setShowEdit(true);
   };
-
   const closeEditModal = () => {
     getUsers();
     setShowEdit(false);
   };
 
-  const [inputs, setInputs] = useState([]);
+  // PAGINATION ET DONNEE UTILISATEUR
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     getUsers();
   }, []);
 
   function getUsers() {
-    axios.get(URL).then(function (response) {
+    const opts = {
+      headers:{
+        "Authorization": "Bearer " + u_info.u_token
+      }
+    }
+    axios.get(URL, opts).then(function (response) {
       setUsers(response.data);
     });
   }
+  const handleChangePage = useCallback((page) => {
+    setPage(page);
+  }, []);
 
-  const deleteUser = (id) => {
+  // MODAL DELETE UTILISATEUR
+  const [id, setId] = useState(null);
+  const [displayConfirmationModal, setDisplayConfirmationModal] =
+    useState(false);
+  const [deleteMessage, setDeleteMessage] = useState(null);
+  const showDeleteModal = (id) => {
+    setId(id);
+    setDeleteMessage(
+      `Etes vous sure de vouloir supprimer '${
+        users.find((x) => x.numCompte === id).identification
+      }'?`
+    );
+    setDisplayConfirmationModal(true);
+  };
+  const hideConfirmationModal = () => {
+    setDisplayConfirmationModal(false);
+  };
+  const submitDelete = (id) => {
     axios.delete(URL + `${id}`).then(function (response) {
       getUsers();
       toast.success(`Suppr Reussi`);
+      setDisplayConfirmationModal(false); 
+      
+      if(id == u_info.u_numCompte){
+        localStorage.clear();
+        navigate("/"); 
+      }
     });
   };
 
-  {
-    /* FONCTIONS DES RECHERCHES ----- MA RECHERCHE ----- */
-  }
+  // ----- MA RECHERCHE -----
   const [contenuTab, setContenuTab] = useState(true);
   function rechercheUtilisateur(event) {
     const valeur = event.target.value;
@@ -77,13 +119,20 @@ export default function Utilisateur() {
   return (
     <>
       <div>
-        <Header />
+        <Header> {u_numCompte} : {u_photoPDP} </Header>
         <ModalAjout show={show} onHide={closeAddModal}>
-          Adding
+          Ajout Nouveau Utilisateur
         </ModalAjout>
         <ModalEdition showEdit={showEdit} onHide={closeEditModal}>
           {numCompteEdit}
         </ModalEdition>
+        <DeleteConfirmation
+          showModal={displayConfirmationModal}
+          confirmModal={submitDelete}
+          hideModal={hideConfirmationModal}
+          id={id}
+          message={deleteMessage}
+        />
 
         <h2>
           List Utilisateurs
@@ -106,8 +155,9 @@ export default function Utilisateur() {
             />
           </label>
         </h2>
-        {/*  ----- TABLEAU LISTE UTILISATEURS ----- */}
+        
 
+        {/*  ----- TABLEAU LISTE UTILISATEURS ----- */}
         <div className="table-responsive text-nowrap">
           <table className="table table-striped w-auto">
             <thead>
@@ -127,26 +177,34 @@ export default function Utilisateur() {
                     <td>{user.identification}</td>
                     <td>{user.attribut}</td>
                     <td>{user.etatCompte}</td>
-                    <td className="mr-4">
+                    <td >
                       <button
                         type="button"
-                        className="btn btn-outline-primary btn-sm m-0 waves-effect"
-                        variant="primary"
+                        className="btn btn-outline-success btn-sm m-1 waves-effect"
+                        variant="default"
                         name="numCompteEdit"
                         onClick={() => showEditModal(user.numCompte)}
                       >
-                        <i
-                          className="fas fa-edit mr-2 grey-text"
-                          aria-hidden="true"
-                        ></i>
-                        EDIT
+                        <BsEye />
                       </button>
-                      <span> </span>
-                      <Button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => deleteUser(user.numCompte)}
+
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary btn-sm m-1 waves-effect"
+                        variant="default"
+                        name="numCompteEdit"
+                        onClick={() => showEditModal(user.numCompte)}
                       >
-                        delete
+                        <BsPencilSquare />
+                      </button>
+
+                      <Button
+                        type="button"
+                        className="btn btn-outline-danger btn-sm m-1 waves-effect"
+                        variant="default"
+                        onClick={() => showDeleteModal(user.numCompte)}
+                      >
+                        <BsFillTrashFill />
                       </Button>
                     </td>
                   </tr>
@@ -155,8 +213,9 @@ export default function Utilisateur() {
                 <tr>
                   <td></td>
                   <td></td>
-                  <td></td>
                   <td> La liste est vide .... </td>
+                  <td></td>
+                  <td></td>
                 </tr>
               )}
             </tbody>
