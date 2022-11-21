@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../api/axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -8,9 +8,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 
-const IP = `192.168.8.102`;
-const PORT = `:5010`;
-const URL = `http://` + IP + PORT + `/api/utilisateur/`;
+const URL = `/`;
 
 export default function ModalAjout(props) {
   const [inputs, setInputs] = useState([]);
@@ -22,7 +20,6 @@ export default function ModalAjout(props) {
   };
 
   const onSubmit = (data) => {
-    // console.log(inputs.photoPDP);
     axios.post(URL, data).then(function (response) {
       if (response.data.success) {
         toast.success(response.data.message);
@@ -41,7 +38,9 @@ export default function ModalAjout(props) {
     identification: Yup.string()
       .required("identification obligatoire")
       .min(2, "trop court!entrez au moins 2 caracteres"),
-    mdp: Yup.string().required("Mot de passe obligatoire").min(4, "trop court! entrez au moins 4 caracteres"),
+    mdp: Yup.string()
+      .required("Mot de passe obligatoire")
+      .min(4, "trop court! entrez au moins 4 caracteres"),
     confirmMdp: Yup.string()
       .required("Mot de passe de confirmation obligatoire")
       .oneOf(
@@ -75,7 +74,7 @@ export default function ModalAjout(props) {
         backdrop="static"
         keyboard={false}
       >
-        <Modal.Header >
+        <Modal.Header>
           <Modal.Title>{props.children}</Modal.Title>
         </Modal.Header>
 

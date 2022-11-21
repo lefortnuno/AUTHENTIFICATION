@@ -1,13 +1,11 @@
-import axios from "axios";
+import axios from "../../api/axios";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 
-const IP = `192.168.8.102`;
-const PORT = `:5010`;
-const URL = `http://` + IP + PORT + `/api/utilisateur/`;
+const URL = `/`;
 let i = 0;
 
 export default function ModalEdition(props) {
@@ -42,6 +40,7 @@ export default function ModalEdition(props) {
     event.preventDefault();
     axios.put(URL + `${id}`, inputs).then(function (response) {
       props.onHide();
+      toast.success("Modification Reussi !")
     });
   };
 

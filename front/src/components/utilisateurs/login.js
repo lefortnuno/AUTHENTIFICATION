@@ -23,21 +23,26 @@ export default function Login() {
         if (response.data.success) {
           navigate("/utilisateur/"); // a decommenter si hiditr page hafa !
           toast.success(`Connection Reussi`);
-          localStorage.setItem("u_numCompte", response.data.user[0].numCompte);
-          localStorage.setItem("u_attribut", response.data.user[0].attribut);
-          localStorage.setItem("u_etatCompte", response.data.user[0].etatCompte);
-          localStorage.setItem("u_photoPDP", response.data.user[0].photoPDP);
+          const u = response.data.user[0];
+          localStorage.setItem("u_numCompte", u.numCompte);
+          localStorage.setItem("u_attribut", u.attribut);
+          localStorage.setItem("u_etatCompte", u.etatCompte );
+          localStorage.setItem("u_photoPDP", u.photoPDP);
           localStorage.setItem("token", response.data.token);
         } else {
           setErrMsg("Identification ou Mot de pass Incorrect ! ");
         }
       })
       .catch((error) => {
-        setErrMsg("Erreur de connection : ", error, " Veuillez vous connecter au serveur !");
+        setErrMsg(
+          "Erreur de connection : ",
+          error,
+          " Veuillez vous connecter au serveur !"
+        );
       });
   };
 
- //SCHEMA VALIDATION FORMULAIRE LOGIN / SE CONNECTER ----- 
+  //SCHEMA VALIDATION FORMULAIRE LOGIN / SE CONNECTER -----
   const validationSchema = Yup.object().shape({
     identification: Yup.string().required("Identification obligatoire"),
     mdp: Yup.string().required("Mot de passe obligatoire"),
@@ -63,9 +68,7 @@ export default function Login() {
         <Header />
         <Form className="text-center border border-light p-5">
           <p className="h4 mb-4">Se Connecter</p>
-          <div className={!errMsg ? null : "alert alert-danger"}  >
-            {errMsg}
-          </div>
+          <div className={!errMsg ? null : "alert alert-danger"}>{errMsg}</div>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label> </Form.Label>
             <Form.Control

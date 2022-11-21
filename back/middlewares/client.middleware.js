@@ -1,13 +1,13 @@
 const AuthMidleware = require("./auth.middleware");
 
-const monRole = "admin";
+const monRole = "client";
 
 module.exports.checkUtilisateur = (req, res, next) => {
   AuthMidleware.checkUtilisateur(req, res, next, {
-    admin: monRole,
-    chef: monRole,
-    chefAdjoint: monRole,
-    agent: monRole,
+    admin: "admin",
+    chef: "chef",
+    chefAdjoint: "chef adjoint",
+    agent: "agent",
     client: monRole,
   });
 };

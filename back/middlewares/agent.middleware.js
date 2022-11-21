@@ -1,39 +1,13 @@
-const utilisateurModel = require("../models/utilisateur.model");
-const jwt = require("jsonwebtoken");
+const AuthMidleware = require("./auth.middleware");
+
+const monRole = "agent";
 
 module.exports.checkUtilisateur = (req, res, next) => {
-  const token = req.headers.authorization;
-
-  if (token) {
-    jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
-      if (decodedToken) {
-        const dtok = decodedToken.numCompte[0];
-        utilisateurModel.getIdUtilisateur(dtok.numCompte, (err, resultat) => {
-          if (
-            resultat[0].attribut == "admin" ||
-            resultat[0].attribut == "chef" ||
-            resultat[0].attribut == "chef adjoint" ||
-            resultat[0].attribut == "agent"
-          ) {
-            next();
-          } else {
-            res.status(403).send({
-              message: `Vous etes un simple ${resultat[0].attribut} !`,
-              success: false,
-            });
-          }
-        });
-      } else {
-        res.status(401).send({
-          message: `Unauthorized! Failed to Decode Token !`,
-          success: false,
-        });
-      }
-    });
-  } else {
-    res.status(401).send({
-      message: `Unauthorized! token invalide!`,
-      success: false,
-    });
-  }
+  AuthMidleware.checkUtilisateur(req, res, next, {
+    admin: "admin",
+    chef: "chef",
+    chefAdjoint: "chef adjoint",
+    agent: monRole,
+    client: monRole,
+  });
 };

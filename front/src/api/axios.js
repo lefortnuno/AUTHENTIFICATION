@@ -1,8 +1,9 @@
-import axios from 'axios';
-
-const IP = `192.168.8.102`;
-const PORT = `:5010`;
+import axios from "axios";
 
 export default axios.create({
-    baseURL: `http://` + IP + PORT + `/api/utilisateur`
+  baseURL:
+    `http://` +
+    process.env.REACT_APP_API_IP_ADRESS +
+    process.env.REACT_APP_API_PORT +
+    `/api/utilisateur`,
 });

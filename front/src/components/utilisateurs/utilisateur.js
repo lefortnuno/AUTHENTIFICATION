@@ -14,16 +14,15 @@ import DeleteConfirmation from "./ModalSuppr";
 const URL = `/`;
 
 export default function Utilisateur() {
-  
   const navigate = useNavigate();
-  const u_token = localStorage.token;
-  const u_numCompte = localStorage.u_numCompte;
-  const u_attribut = localStorage.u_attribut;
-  const u_photoPDP = localStorage.u_photoPDP;
-  const u_etatCompte = localStorage.u_etatCompte;
-  
-    const u_info = { u_token, u_attribut, u_photoPDP, u_numCompte, u_etatCompte}
-  
+  const u_info = {
+    u_token: localStorage.token,
+    u_attribut: localStorage.u_attribut,
+    u_photoPDP: localStorage.u_photoPDP,
+    u_numCompte: localStorage.u_numCompte,
+    u_etatCompte: localStorage.u_etatCompte,
+  };
+
   // MODAL AJOUT UTILISATEUR
   const [show, setShow] = useState(false);
   const showAddModal = () => setShow(true);
@@ -54,10 +53,10 @@ export default function Utilisateur() {
 
   function getUsers() {
     const opts = {
-      headers:{
-        "Authorization": "Bearer " + u_info.u_token
-      }
-    }
+      headers: {
+        Authorization: u_info.u_token,
+      },
+    };
     axios.get(URL, opts).then(function (response) {
       setUsers(response.data);
     });
@@ -87,11 +86,11 @@ export default function Utilisateur() {
     axios.delete(URL + `${id}`).then(function (response) {
       getUsers();
       toast.success(`Suppr Reussi`);
-      setDisplayConfirmationModal(false); 
-      
-      if(id == u_info.u_numCompte){
+      setDisplayConfirmationModal(false);
+
+      if (id == u_info.u_numCompte) {
         localStorage.clear();
-        navigate("/"); 
+        navigate("/");
       }
     });
   };
@@ -119,7 +118,9 @@ export default function Utilisateur() {
   return (
     <>
       <div>
-        <Header> {u_numCompte} : {u_photoPDP} </Header>
+        <Header>
+          {u_info.u_numCompte} : {u_info.u_photoPDP}
+        </Header>
         <ModalAjout show={show} onHide={closeAddModal}>
           Ajout Nouveau Utilisateur
         </ModalAjout>
@@ -155,7 +156,6 @@ export default function Utilisateur() {
             />
           </label>
         </h2>
-        
 
         {/*  ----- TABLEAU LISTE UTILISATEURS ----- */}
         <div className="table-responsive text-nowrap">
@@ -177,7 +177,7 @@ export default function Utilisateur() {
                     <td>{user.identification}</td>
                     <td>{user.attribut}</td>
                     <td>{user.etatCompte}</td>
-                    <td >
+                    <td>
                       <button
                         type="button"
                         className="btn btn-outline-success btn-sm m-1 waves-effect"
