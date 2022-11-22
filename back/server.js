@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const multer = require('multer');
 require('dotenv').config({path: "./config/.env"})
 
 const utilisateurRoute = require('./routes/utilisateur.route')

@@ -8,23 +8,47 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 
-const URL = `/`;
+const URL_UTILISATEUR = `/`;
 
 export default function ModalAjout(props) {
-  const [inputs, setInputs] = useState([]);
+  // IMAGE PHOTO DE PROFILE DES UTILISATEUR
+  const [userInfo, setuserInfo] = useState({
+    file: [],
+    filepreview: null,
+  });
 
-  const handleChangePDP = (event) => {
-    const name = event.target.name;
-    const value = event.target.files[0];
-    setInputs((values) => ({ ...values, [name]: value }));
+  const handleInputChange = (event) => {
+    setuserInfo({
+      ...userInfo,
+      file: event.target.files[0],
+      filepreview: URL.createObjectURL(event.target.files[0]),
+    });
   };
 
+  const submitPhotoProfile = async () => {
+    const formdata = new FormData();
+    formdata.append("avatar", userInfo.file);
+
+    axios
+      .post(URL_UTILISATEUR + "photoProfile", formdata, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((res) => {
+        console.warn(res);
+        if (res.data.success) {
+          toast.success("Image upload successfully");
+        }
+      });
+  };
+
+  // INFO DU COMPTE UTILISATEUR
   const onSubmit = (data) => {
-    axios.post(URL, data).then(function (response) {
+    axios.post(URL_UTILISATEUR, data).then(function (response) {
       if (response.data.success) {
         toast.success(response.data.message);
-        reset();
-        props.onHide();
+        // reset();
+        // props.onHide();
+        submitPhotoProfile();
       } else {
         toast.error(response.data.message);
       }
@@ -80,13 +104,24 @@ export default function ModalAjout(props) {
 
         <Modal.Body>
           <Form>
+            <div className="text-center">
+              {userInfo.filepreview !== null ? (
+                <img
+                  className="img-thumbnail rounded  mx-auto d-block"
+                  src={userInfo.filepreview}
+                  alt="photo de prohile"
+                />
+              ) : null}
+            </div>
+
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput0">
               <Form.Label>Photo de profile</Form.Label>
               <Form.Control
                 type="file"
-                name="photoPDP"
-                onChange={handleChangePDP}
-                placeholder="photoPDP"
+                className="form-control"
+                name="upload_file"
+                onChange={handleInputChange}
+                placeholder="photo de profile"
               />
             </Form.Group>
 

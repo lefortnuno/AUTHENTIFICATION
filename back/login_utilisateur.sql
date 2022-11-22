@@ -31,25 +31,26 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `compte`;
 CREATE TABLE IF NOT EXISTS `compte` (
   `numCompte` int(11) NOT NULL AUTO_INCREMENT,
+  `photoPDP` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `attribut` varchar(15) DEFAULT 'client',
   `identification` varchar(50) NOT NULL,
   `mdp` varchar(15) NOT NULL,
   `etatCompte` varchar(25) DEFAULT 'actif',
   PRIMARY KEY (`numCompte`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `compte`
 --
 
 INSERT INTO `compte` (`numCompte`, `attribut`, `identification`, `mdp`, `etatCompte`) VALUES
-(6, 'client', 'nuno-6', 'nuno', 'actif'),
-(2, 'client', 'undefined-2', 'gggg', 'actif'),
-(3, 'client', 'tttt-3', '55555', 'actif'),
-(4, 'client', 'lala-4', 'www', 'actif'),
+(6, 'admin', 'nuno-6', 'nuno', 'actif'),
+(2, 'chef', 'undefined-2', 'gggg', 'actif'),
+(3, 'chef adjoint', 'tttt-3', '55555', 'actif'),
+(4, 'agent', 'lala-4', 'www', 'actif'),
 (5, 'client', 'kkk-5', '111', 'actif'),
 (7, 'client', 'bbb-7', 'bbb', 'actif'),
-(8, 'client', 'w-8', 'w', 'actif');
+(8, 'chef', 'w-8', 'w', 'actif');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

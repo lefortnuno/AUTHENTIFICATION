@@ -11,7 +11,6 @@ router.get("/:id", utilisateurController.getIdUtilisateur);
 router.post("/", utilisateurController.addUtilisateur);
 router.put("/:id", utilisateurController.updateUtilisateur);
 router.put("/role/:id", utilisateurController.roleUtilisateur);
-router.put("/etat/:id", utilisateurController.etatCompteUtilisateur);
 router.delete("/:id",  utilisateurController.deleteUtilisateur);
 router.get("/recherche/:valeur", utilisateurController.searchUtilisateurByParams);
 

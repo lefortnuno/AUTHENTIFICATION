@@ -2,6 +2,7 @@ let dbConn = require("../config/db");
 
 let Utilisateur = function (utilisateur) {
   this.numCompte = utilisateur.numCompte;
+  this.photoPDP = utilisateur.photoPDP;
   this.identification = utilisateur.identification;
   this.attribut = utilisateur.attribut;
   this.mdp = utilisateur.mdp;
@@ -154,20 +155,6 @@ Utilisateur.vraideleteUtilisateur = (numCompte, result) => {
 };
 
 Utilisateur.roleUtilisateur = (newUtilisateur, numCompte, result) => {
-  dbConn.query(
-    `update compte set ? where numCompte = ${numCompte}`,
-    newUtilisateur,
-    function (err, res) {
-      if (err) {
-        result(err, null);
-      } else {
-        result(null, res);
-      }
-    }
-  );
-};
-
-Utilisateur.etatCompteUtilisateur = (newUtilisateur, numCompte, result) => {
   dbConn.query(
     `update compte set ? where numCompte = ${numCompte}`,
     newUtilisateur,
